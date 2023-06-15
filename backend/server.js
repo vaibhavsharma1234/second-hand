@@ -20,7 +20,18 @@ app.get('/home', (req, res) => {
 })
 
 const port = process.env.PORT
+if (process.env.NODE_ENV === 'production') {
+  // '../../', 'public', 'uploads'
+  app.use(express.static(path.join(__dirname, '../', 'build')))
 
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../', 'build', 'index.html'))
+  })
+} else {
+  app.get('*', (req, res) => {
+    res.send('haha')
+  })
+}
 app.listen(port || 8000, () =>
   console.log(`Server is running successfully on PORT ${port}`)
 )
